@@ -2,11 +2,17 @@
 
 To get started, see the following:
 
-* [AWS SAM — Setting Local Serverless Development With Lambda and DynamoDB]((https://betterprogramming.pub/aws-sam-setting-local-serverless-development-with-lambda-and-dynamodb-5b4c7375f813)
+* Learn lots of details from this article - [AWS SAM — Setting Local Serverless Development With Lambda and DynamoDB](https://betterprogramming.pub/aws-sam-setting-local-serverless-development-with-lambda-and-dynamodb-5b4c7375f813)
 * [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [Install SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
-* [Process DynamoDB events](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-example-ddb.html)
-* [How to get Credentials for AWS CLI](https://docs.aws.amazon.com/singlesignon/latest/userguide/howtogetcredentials.html)
+* [Install Node.js 18](https://nodejs.org/en/), including the npm package management tool.
+* [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community).
+
+The project is created from this command:
+```bash
+sam init --name sam-lambda-dynamo --runtime nodejs18.x --app-template quick-start-web
+```
+and multiple updates later...
 
 ## Project Structure
 
@@ -14,8 +20,8 @@ This project contains source code and supporting files for a serverless applicat
 
 - `src` - Code for the application's Lambda function.
 - `events` - Invocation events that you can use to invoke the function.
-- `__tests__` - Unit tests for the application code. 
 - `template.yaml` - A template that defines the application's AWS resources.
+- `__tests__` - Unit tests for the application code. 
 
 The application uses several AWS resources, including Lambda functions, an API Gateway API, and Amazon DynamoDB tables. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
@@ -25,12 +31,6 @@ The AWS Toolkit is an open-source plugin for popular IDEs that uses the AWS SAM 
 ## Deploy the sample application
 
 The AWS SAM CLI is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
-
-To use the AWS SAM CLI, you need the following tools:
-
-* AWS SAM CLI - [Install the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
-* Node.js - [Install Node.js 14](https://nodejs.org/en/), including the npm package management tool.
-* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community).
 
 To build and deploy your application for the first time, run the following in your shell:
 
@@ -169,3 +169,7 @@ sam delete --stack-name sam-lambda-dynamo
 For an introduction to the AWS SAM specification, the AWS SAM CLI, and serverless application concepts, see the [AWS SAM Developer Guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html).
 
 Next, you can use the AWS Serverless Application Repository to deploy ready-to-use apps that go beyond Hello World samples and learn how authors developed their applications. For more information, see the [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/) and the [AWS Serverless Application Repository Developer Guide](https://docs.aws.amazon.com/serverlessrepo/latest/devguide/what-is-serverlessrepo.html).
+
+* [Process DynamoDB events](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-example-ddb.html)
+* [How to get Credentials for AWS CLI](https://docs.aws.amazon.com/singlesignon/latest/userguide/howtogetcredentials.html)
+
