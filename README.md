@@ -1,5 +1,15 @@
 # sam-lambda-dynamo
 
+To get started, see the following:
+
+* [AWS SAM — Setting Local Serverless Development With Lambda and DynamoDB]((https://betterprogramming.pub/aws-sam-setting-local-serverless-development-with-lambda-and-dynamodb-5b4c7375f813)
+* [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* [Install SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
+* [Process DynamoDB events](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-example-ddb.html)
+* [How to get Credentials for AWS CLI](https://docs.aws.amazon.com/singlesignon/latest/userguide/howtogetcredentials.html)
+
+## Project Structure
+
 This project contains source code and supporting files for a serverless application that you can deploy with the AWS Serverless Application Model (AWS SAM) command line interface (CLI). It includes the following files and folders:
 
 - `src` - Code for the application's Lambda function.
@@ -11,20 +21,6 @@ The application uses several AWS resources, including Lambda functions, an API G
 
 If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
 The AWS Toolkit is an open-source plugin for popular IDEs that uses the AWS SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds step-through debugging for Lambda function code. 
-
-To get started, see the following:
-
-* [CLion](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [GoLand](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [IntelliJ](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [WebStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [Rider](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PhpStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PyCharm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [RubyMine](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [DataGrip](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [VS Code](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
-* [Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/welcome.html)
 
 ## Deploy the sample application
 
@@ -55,10 +51,23 @@ The API Gateway endpoint API will be displayed in the outputs when the deploymen
 
 ## Use the AWS SAM CLI to build and test locally
 
+Run Docker on your machine, then
+- Create DynamoDB in Docker: you can kill this run and restart in Docker later
+```bash
+docker run -p 8000:8000 amazon/dynamodb-local
+```
+
+Create new table with this command:
+```bash
+aws dynamodb create-table --attribute-definitions AttributeName=id,AttributeType=S \
+--key-schema AttributeName=id,KeyType=HASH --billing-mode PAY_PER_REQUEST \
+--endpoint-url http://localhost:8000 --table-name sample_table
+```
+
 Build your application by using the `sam build` command.
 
 ```bash
-my-application$ sam build
+sam build
 ```
 
 The AWS SAM CLI installs dependencies that are defined in `package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -68,15 +77,17 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-my-application$ sam local invoke putItemFunction --event events/event-post-item.json
-my-application$ sam local invoke getAllItemsFunction --event events/event-get-all-items.json
+sam local invoke putItemFunction --event events/post-items.json
+sam local invoke getAllItemsFunction --event events/get-all-items.json
 ```
+
+🚀🚀🚀 Done! 🚀🚀🚀
 
 The AWS SAM CLI can also emulate your application's API. Use the `sam local start-api` command to run the API locally on port 3000.
 
 ```bash
-my-application$ sam local start-api
-my-application$ curl http://localhost:3000/
+sam local start-api
+curl http://localhost:3000/
 ```
 
 The AWS SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -117,7 +128,7 @@ The dead-letter queue is a location for Lambda to send events that could not be 
 Deploy the updated application.
 
 ```bash
-my-application$ sam deploy
+sam deploy
 ```
 
 Open the [**Applications**](https://console.aws.amazon.com/lambda/home#/applications) page of the Lambda console, and choose your application. When the deployment completes, view the application resources on the **Overview** tab to see the new resource. Then, choose the function to see the updated configuration that specifies the dead-letter queue.
@@ -129,7 +140,7 @@ To simplify troubleshooting, the AWS SAM CLI has a command called `sam logs`. `s
 **NOTE:** This command works for all Lambda functions, not just the ones you deploy using AWS SAM.
 
 ```bash
-my-application$ sam logs -n putItemFunction --stack-name sam-app --tail
+sam logs -n putItemFunction --stack-name sam-app --tail
 ```
 
 **NOTE:** This uses the logical name of the function within the stack. This is the correct name to use when searching logs inside an AWS Lambda function within a CloudFormation stack, even if the deployed function name varies due to CloudFormation's unique resource name generation.
@@ -141,8 +152,8 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `__tests__` folder in this project. Use `npm` to install the [Jest test framework](https://jestjs.io/) and run unit tests.
 
 ```bash
-my-application$ npm install
-my-application$ npm run test
+npm install
+npm run test
 ```
 
 ## Cleanup
